@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class FileController {
 		return "/upload/uploadResult";
 	}
 
+
 	@GetMapping("/download")
 	public String download(Model model) {
 		List<String> fileList = fileService.getStoreFiles();
@@ -69,7 +71,6 @@ public class FileController {
 	@GetMapping("/download/{fileName}")
 	public ResponseEntity<Resource> download(@PathVariable("fileName") String fileName) throws IOException {
 		Path path = Paths.get(uploadDirectory + fileName);
-		System.out.println(path);
 		String contentType = Files.probeContentType(path);
 		HttpHeaders headers = new HttpHeaders();
 		// 응답 헤더에 파일정보 설정
@@ -93,5 +94,10 @@ public class FileController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_TYPE, contentType);
 		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+
+	@GetMapping("/product")
+	public String imageView(){
+		return "/download/imageView";
 	}
 }
